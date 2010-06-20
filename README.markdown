@@ -77,7 +77,8 @@ private static function instance() {
 }
 Replace the arguments of `new PDO()` as you wish.
 
-Short reference:
+Short reference
+---------------
 	class DB
 	{
 		// returns the database instance
