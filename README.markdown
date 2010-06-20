@@ -26,7 +26,7 @@ this part out, resulting in:
 Much nicer, isn't it?
 
 So, wonder which static methods you can use? All. All methods PDO implements.
-I simply redirect all static calls to the PDO equivalents (using __call_static,
+I simply redirect all static calls to the PDO equivalents (using `__callStatic`,
 this is why this class requires PHP 5.3).
 
 Second design goal: Secure!
@@ -54,11 +54,11 @@ Therefore the exaple code above may also be written like this:
 Configuration
 -------------
 
-First of all: You need PHP 5.3 and PDO (but the class can be rewritten
-to be 5.2 compatible and to use mysqli for example.)
+First of all: You need PHP 5.3 and PDO (but theoretically you could rewrite
+the class to use PHP 5.2 and mysqli for example.)
 
-All you have to do to get the class working is to modify the `DB::instance` function,
-which by default is defined like this:
+So, to get going and use this super-nice class, you have to modify
+the `DB::instance` method, which by default is defined like this:
 private static function instance() {
 	if (self::$instance === null) {
 		self::$instance = new PDO(
@@ -76,6 +76,7 @@ private static function instance() {
 	return self::$instance;
 }
 Replace the arguments of `new PDO()` as you wish.
+Than, `require_once` the file and have fun using it!
 
 Short reference
 ---------------
