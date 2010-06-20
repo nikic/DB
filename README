@@ -1,0 +1,86 @@
+This is a very simplistic database wrapper for PDO, which tries
+to solve several common problems in a simple way.
+
+First design goal: Simple usage!
+I did not use a Singleton pattern for this class, because Singletons
+always involve unnecessarily much code and aren't that nice to use and read.
+A typical query execution of a Singleton-based DB-class looks like this:
+$db = DB::getInstance();
+$db->query('SELECT ...');
+[...]
+$db->exec('INSERT INTO ...');
+Or, if it's only one query:
+DB::getInstance()->query('SELECT ...');
+Now, I think this getInstance()-> part of the code heither carries any
+further information, nor is useful in some way. Therefore, I simply left
+this part out:
+DB::query('SELECT ...');
+[...]
+DB::exec('SELECT ...');
+Much nicer, isn't it?
+
+So, wonder which static methods you can use? All. All methods PDO implements.
+I simply redirect all static calls to the PDO equivalents.
+
+Second design goal: Secure!
+Apart from this redirecting functionality this class offers further two (three) methods:
+DB::q() and DB::x() [and DB::qutoQuote() which you are like not going to use.]
+These methods are shortcuts to DB::query() (q) and DB::exec() (x) with the difference of
+something i called autoQuoting.
+So, again, let's start with an example:
+DB::q(
+	'SELECT * FROM user WHERE lastAction = ? AND group = ?s AND points > ?i',
+	'CURRENT_DATE', 'user', 7000 //        ^             ^^               ^^
+)
+See those question marks? These are placeholders, which will be replaced with the arguments
+passed after the query. There are several types of placeholders:
+?  simply inserts the argument , not performing any escaping
+?s (from string) inserts the argument, performing string-Escaping, i.e. putting the argument in ' and applying addslashes()
+?i (from integer) inserts the argument, performing integer-Escaping, i.e. applying intval() to the argument
+Therefore the exaple code above may also be written as:
+DB::query(
+	"SELECT * FROM user WHERE lastAction = CURRENT_DATE AND group = 'user' AND points > 7000"
+)
+
+So, now you now you know how to use the class, now comes the configuration:
+All you have to do is modify the DB::instance function, which is by default defined as:
+private static function instance() {
+	if (self::$instance === null) {
+		self::$instance = new PDO(
+			'mysql:host='.DB_HOST.';dbname='.DB_NAME,
+			DB_USER,
+			DB_PASS,
+			array(
+				PDO::ATTR_PERSISTENT => true,
+				PDO::MYSQL_ATTR_INIT_COMMAND => 'SET CHARACTER SET utf8',
+			)
+		);
+		self::$instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	}
+	
+	return self::$instance;
+}
+Replace the arguments of new PDO() as you wish.
+
+Short reference:
+class DB
+{
+	// returns the database instance
+	private static function instance()
+	
+	// redirects static calls to self::instance()
+	public static function __callStatic($method, $args)
+	
+	// DB::query with autoquote
+	// either used as DB::q('QUERY', param1, param2, ...)
+	// or DB::q('QUERY', array(param1, param2, ...))
+	public static function q()
+	
+	// DB::exec with autoquote
+	// either used as DB::x('QUERY', param1, param2, ...)
+	// or DB::x('QUERY', array(param1, param2, ...))
+	public static function x()
+	
+	// autoQuote as described above
+	public static function autoQuote($query, $args)
+}
