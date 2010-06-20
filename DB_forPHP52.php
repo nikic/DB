@@ -78,8 +78,45 @@
 			return $query;
 		}
 		
-		public static function __callStatic($method, $args) {
-			return call_user_func_array(array(self::instance(), $method), $arguments);
+		public static function beginTransaction() {
+			return self::instance()->beginTransaction();
+		}
+		public static function commit() {
+			return self::instance()->commit();
+		}
+		public static function errorCode() {
+			return self::instance()->errorCode();
+		}
+		public static function errorInfo() {
+			return self::instance()->errorInfo();
+		}
+		public static function exec($statement) {
+			return self::instance()->exec($statement);
+		}
+		public static function getAttribute($attribute) {
+			return self::instance()->getAttribute($attribute);
+		}
+		public static function getAvailableDrivers() {
+			return self::instance()->getAvailableDrivers();
+		}
+		public static function lastInsertId($name = NULL) {
+			return self::instance()->lastInsertId($name);
+		}
+		public static function prepare($statement, $driver_options = array()) {
+			return self::instance()->prepare($statement, $driver_options);
+		}
+		public static function query() {
+			$arguments = func_get_args();
+			return call_user_func_array(array(self::instance(), 'query'), $arguments);
+		}
+		public static function quote($string, $parameter_type = PDO::PARAM_STR) {
+			return self::instance()->prepare($string, $parameter_type);
+		}
+		public static function rollBack() {
+			return self::instance()->rollBack();
+		}
+		public static function setAttribute($attribute, $value) {
+			return self::instance()->setAttribute($attribute, $value);
 		}
 	}
 ?>

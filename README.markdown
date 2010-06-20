@@ -2,7 +2,7 @@ Simple database wrapper for PDO
 ===============================
 
 This is a very simplistic database wrapper for PDO, which tries
-to solve several common problems in a simple way, using PHP 5.3 functionality.
+to solve several common problems in a simple way.
 
 First design goal: Simple usage!
 --------------------------------
@@ -26,8 +26,7 @@ this part out, resulting in:
 Much nicer, isn't it?
 
 So, wonder which static methods you can use? All. All methods PDO implements.
-I simply redirect all static calls to the PDO equivalents (using `__callStatic`,
-this is why this class requires PHP 5.3).
+I simply redirect all static calls to the PDO equivalents.
 
 Second design goal: Secure!
 ---------------------------
@@ -54,11 +53,15 @@ Therefore the exaple code above may also be written like this:
 Configuration
 -------------
 
-First of all: You need PHP 5.3 and PDO (but theoretically you could rewrite
-the class to use PHP 5.2 and mysqli for example.)
+There are two versions of this class available, one for PHP 5.3
+(DB.php) and one for PHP 5.2 (DB_forPHP52.php). The only difference
+is, that the former uses `__callStatic` to redirect the static calls
+to the PDO instance, the ladder simply redefines all methods. (You may
+obviously use the 5.2 version on PHP 5.3, it actually should be slightly
+faster.)
 
-So, to get going and use this super-nice class, you have to modify
-the `DB::instance` method, which by default is defined like this:
+So, to get going and use this class, you have to modify the
+`DB::instance` method, which by default is defined like this:
 private static function instance() {
 	if (self::$instance === null) {
 		self::$instance = new PDO(
