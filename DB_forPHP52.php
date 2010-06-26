@@ -26,21 +26,31 @@
 		public static function q() {
 			$args = func_get_args();
 			$c = count($args);
+			
 			if ($c == 0) {
-				return self::instance()->query($query);
+				throw new InvalidArgumentException('No Query given!');
 			}
 			
-			return self::instance()->query(self::autoQuote($query, $c == 1 && is_array($args[0]) ? $args[0] : $args));
+			if ($c == 1) {
+				return self::instance()->query(array_shift($args));
+			}
+			
+			return self::instance()->query(self::autoQuote(array_shift($args), $c == 2 && is_array($args[0]) ? $args[0] : $args));
 		}
 		
-		public static function x($query) {
+		public static function x() {
 			$args = func_get_args();
 			$c = count($args);
+			
 			if ($c == 0) {
-				return self::instance()->exec($query);
+				throw new InvalidArgumentException('No Query given!');
 			}
 			
-			return self::instance()->exec(self::autoQuote($query, $c == 1 && is_array($args[0]) ? $args[0] : $args));
+			if ($c == 1) {
+				return self::instance()->exec(array_shift($args));
+			}
+			
+			return self::instance()->exec(self::autoQuote(array_shift($args), $c == 2 && is_array($args[0]) ? $args[0] : $args));
 		}
 		
 		public static function autoQuote($query, $args) {
