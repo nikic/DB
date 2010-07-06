@@ -55,20 +55,18 @@
 		
 		public static function autoQuote($query, $args) {
 			$c = count($args); // num of args
-			$l = strlen($query); // length of query
 			$i = 0; // position in string
 			while (
 				   $c-- // there still are args
 				&& false !== ($i = strpos($query, '?', $i)) // needle still exists
 			) {
 				// $i+1 is the quote-r
-				if ($i+1 == $l || false === $type = strpos('si', $query[$i+1])) {
+				if (!isset($query[$i+1]) || false === $type = strpos('si', $query[$i+1])) {
 					// no or unsupported quote-r given
 					// => direct insert
 					$replace = array_shift($args);
 					$query = substr_replace($query, $replace, $i, 1);
 					$i += strlen($replace);
-					$l += strlen($replace);
 					continue;
 				}
 				
@@ -80,8 +78,7 @@
 				}
 				
 				$query = substr_replace($query, $replace, $i, 2);
-				$i += strlen($replace)-1; // -1 due to
-				$l += strlen($replace)-1; // removal of quote-r
+				$i += strlen($replace)-1; // -1 due to removal of quote-r
 			}
 			
 			return $query;
