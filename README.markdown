@@ -86,7 +86,7 @@ Short reference
 	class DB
 	{
 		// returns the database instance
-		private static function instance()
+		public static function instance()
 		
 		// redirects static calls to self::instance()
 		public static function __callStatic($method, $args)

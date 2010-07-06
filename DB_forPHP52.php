@@ -6,7 +6,7 @@
 		final private function __construct() {}
 		final private function __clone() {}
 		
-		private static function instance() {
+		public static function instance() {
 			if (self::$instance === null) {
 				self::$instance = new PDO(
 					'mysql:host='.DB_HOST.';dbname='.DB_NAME,
