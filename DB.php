@@ -60,10 +60,9 @@
 			while (
 				   $c-- // there still are args
 				&& false !== ($i = strpos($query, '?', $i)) // needle still exists
-				&& $i < $l // not near end
 			) {
 				// $i+1 is the quote-r
-				if ($i+1 >= $l || false === $type = strpos('si', $query[$i+1])) {
+				if ($i+1 == $l || false === $type = strpos('si', $query[$i+1])) {
 					// no or unsupported quote-r given
 					// => direct insert
 					$replace = array_shift($args);
