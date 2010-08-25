@@ -116,7 +116,7 @@
 			return call_user_func_array(array(self::instance(), 'query'), $arguments);
 		}
 		public static function quote($string, $parameter_type = PDO::PARAM_STR) {
-			return self::instance()->prepare($string, $parameter_type);
+			return self::instance()->quote($string, $parameter_type);
 		}
 		public static function rollBack() {
 			return self::instance()->rollBack();
