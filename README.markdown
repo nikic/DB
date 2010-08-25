@@ -1,31 +1,28 @@
 Simple database wrapper for PDO
 ===============================
 
-This is a very simplistic database wrapper for PDO, which tries
-to solve several common problems in a simple way.
+This is a *very* simplistic database wrapper for PDO, with two goals:
+simple usage and security.
 
 First design goal: Simple usage!
 --------------------------------
 
-
-I did not use a Singleton pattern for this class, because Singletons
+I did not use the Singleton pattern for this class, because Singletons
 always involve unnecessarily much code and aren't that nice to use and read.
 A typical query execution of a Singleton-based DB-class looks like this:
 	$db = DB::getInstance();
 	$db->query('SELECT ...');
-	[...]
 	$db->exec('INSERT INTO ...');
 Or, if it's only one query:
 	DB::getInstance()->query('SELECT ...');
 Now, I think this `getInstance()->` part of the code neither carries
-further information, nor is it useful in some way. Therefore, I simply left
+further information, nor is useful in some way. Therefore, I simply left
 this part out, resulting in:
 	DB::query('SELECT ...');
-	[...]
 	DB::exec('SELECT ...');
 Much nicer, isn't it?
 
-So, wonder which static methods you can use? All. All methods PDO implements.
+So, wonder which static methods you can use? All! All methods PDO implements.
 I simply redirect all static calls to the PDO equivalents.
 
 Second design goal: Secure!
@@ -35,10 +32,10 @@ Apart from this redirecting functionality this class offers two further methods:
 `DB::q()` and `DB::x()`
 These methods are shortcuts to `DB::query()` (q) and `DB::exec()` (x) with the difference of
 something i called autoQuoting.
-So, again, let's start with a example:
+Again, let's start with a example:
 	DB::q(
 		'SELECT * FROM user WHERE lastAction = ? AND group = ?s AND points > ?i',
-		'CURRENT_DATE', 'user', 7000 //        ^             ^^               ^^
+		'CURRENT_DATE', 'user', 7000 //        ^             ^^              ^^
 	)
 See those question marks? These are placeholders, which will be replaced with the arguments
 passed after the query. There are several types of placeholders:
@@ -56,7 +53,7 @@ Configuration
 There are two versions of this class available, one for PHP 5.3
 (DB.php) and one for PHP 5.2 (DB_forPHP52.php). The only difference
 is, that the former uses `__callStatic` to redirect the static calls
-to the PDO instance, the ladder simply redefines all methods. (You may
+to the PDO instance, the latter simply redefines all methods. (You may
 obviously use the 5.2 version on PHP 5.3, it actually should be slightly
 faster.)
 
