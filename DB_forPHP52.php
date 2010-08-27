@@ -119,4 +119,3 @@
             return self::instance()->setAttribute($attribute, $value);
         }
     }
-?>
