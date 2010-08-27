@@ -40,8 +40,8 @@ Again, let's start with a example:
 See those question marks? These are placeholders, which will be replaced with the arguments
 passed after the query. There are several types of placeholders:
 ? simply inserts the argument, not performing any escaping
-?s (from string) inserts the argument, performing string escaping, i.e. putting the argument in ' and applying `addslashes`
-?i (from integer) inserts the argument, performing integer escaping, i.e. applying `intval`
+?s (string) inserts the argument, performing string escaping, i.e. putting the argument in ' and applying `addslashes`
+?i (integer) inserts the argument, performing integer escaping, i.e. applying `intval`
 Therefore the example code above may also be written like this:
 	DB::query(
 		"SELECT * FROM user WHERE lastAction = CURRENT_DATE AND group = 'user' AND points > 7000"
@@ -85,19 +85,15 @@ Short reference
 		// returns the database instance
 		public static function instance()
 		
-		// redirects static calls to self::instance()
-		public static function __callStatic($method, $args)
+		// DB::query with autoQuote:
+		public static function q($query, $params, $...)
 		
-		// DB::query with autoquote
-		// either used as DB::q('QUERY', param1, param2, ...)
-		// or DB::q('QUERY', array(param1, param2, ...))
-		public static function q()
-		
-		// DB::exec with autoquote
-		// either used as DB::x('QUERY', param1, param2, ...)
-		// or DB::x('QUERY', array(param1, param2, ...))
-		public static function x()
+		// DB::exec with autoQuote
+		public static function x($query, $params, $...)
 		
 		// autoQuote as described above
 		public static function autoQuote($query, $args)
+        
+        // All methods defined by PDO
+        // e.d prepare(), quote(), ...
 	}

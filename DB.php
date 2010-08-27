@@ -30,24 +30,22 @@
         
         public static function q($query) {
             $args = func_get_args();
-            $c    = func_num_args();
             
-            if ($c == 1) {
+            if (func_num_args() == 1) {
                 return self::instance()->query($query);
             }
             
-            return self::instance()->query(self::autoQuote(array_shift($args), $c == 2 && is_array($args[0]) ? $args[0] : $args));
+            return self::instance()->query(self::autoQuote(array_shift($args), $args));
         }
         
         public static function x($query) {
             $args = func_get_args();
-            $c    = func_num_args();
             
-            if ($c == 1) {
+            if (func_num_args() == 1) {
                 return self::instance()->exec($query);
             }
             
-            return self::instance()->exec(self::autoQuote(array_shift($args), $c == 2 && is_array($args[0]) ? $args[0] : $args));
+            return self::instance()->exec(self::autoQuote(array_shift($args), $args));
         }
         
         public static function autoQuote($query, $args) {
