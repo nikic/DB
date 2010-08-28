@@ -49,28 +49,32 @@
         }
         
         public static function autoQuote($query, $args) {
-            $i = 0; // position in string
-            while (null  !== ($arg = array_shift($args))    // there still are args
-                && false !== ($i = strpos($query, '?', $i)) // needle still exists
-            ) {
+            $i = strlen($query);
+            $c = count($args);
+            
+            if ($c != substr_count($query, '?')) {
+                throw new UnexpectedValueException('Wrong parameter count: Number of placeholders and parameters does not match');
+            }
+            
+            while ($c--) {
+                while ($i-- && $query[$i] != '?');
+                
                 // $i+1 is the quote-r
                 if (!isset($query[$i+1]) || false === $type = strpos('si', $query[$i+1])) {
                     // no or unsupported quote-r given
                     // => direct insert
-                    $query = substr_replace($query, $arg, $i, 1);
-                    $i += strlen($arg);
+                    $query = substr_replace($query, $args[$c], $i, 1);
                     continue;
                 }
                 
                 if ($type == 0) {
-                    $replace = '\''.addslashes($arg).'\'';
+                    $replace = '\'' . addslashes($args[$c]) . '\'';
                 }
                 elseif ($type == 1) {
-                    $replace = intval($arg);
+                    $replace = intval($args[$c]);
                 }
                 
                 $query = substr_replace($query, $replace, $i, 2);
-                $i += strlen($replace)-1; // -1 due to removal of quote-r
             }
             
             return $query;
