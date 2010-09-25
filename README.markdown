@@ -34,14 +34,18 @@ These methods are shortcuts to `DB::query()` (q) and `DB::exec()` (x) with the d
 something i called autoQuoting.
 Again, let's start with a example:
 	DB::q(
-		'SELECT * FROM user WHERE lastAction = ? AND group = ?s AND points > ?i',
-		'CURRENT_DATE', 'user', 7000 //        ^             ^^              ^^
+		'SELECT * FROM user WHERE group = ?s AND points > ?i',
+		'user', 7000 //                   ^^              ^^
 	)
 See those question marks? These are placeholders, which will be replaced with the arguments
 passed after the query. There are several types of placeholders:
-? simply inserts the argument, not performing any escaping
+? simply inserts the argument, not performing any escaping [DEPRECATED! This behaviour will change!]
 ?s (string) inserts the argument, performing string escaping, i.e. putting the argument in ' and applying `addslashes`
 ?i (integer) inserts the argument, performing integer escaping, i.e. applying `intval`
+?a (array) inserts the argument, converting it to a list of string-escaped values:
+    DB::q('SELECT * FROM user WHERE name IN ?a', array('foo', 'bar', 'hello', 'world'));
+    is converted to:
+    SELECT * FROM user WHERE name IN ('foo','bar','hello','world')
 Therefore the example code above may also be written like this:
 	DB::query(
 		"SELECT * FROM user WHERE lastAction = CURRENT_DATE AND group = 'user' AND points > 7000"

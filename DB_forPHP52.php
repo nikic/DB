@@ -73,6 +73,12 @@
                 elseif ($type == 1) {
                     $replace = intval($args[$c]);
                 }
+                elseif ($type == 2) {
+                    foreach ($args[$c]as &$value) {
+                        $value = '\'' . addslashes($value) . '\'';
+                    }
+                    $replace = '(' . implode(',', $args[$c]) . ')';
+                }
                 
                 $query = substr_replace($query, $replace, $i, 2);
             }
