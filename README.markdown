@@ -96,7 +96,7 @@ Short reference
 		public static function x($query, $params, $...)
 		
 		// autoQuote as described above
-		public static function autoQuote($query, $args)
+		public static function autoQuote($query, array $args)
         
         // All methods defined by PDO
         // e.d prepare(), quote(), ...

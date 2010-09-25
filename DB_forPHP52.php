@@ -48,7 +48,7 @@
             return self::instance()->exec(self::autoQuote(array_shift($args), $args));
         }
         
-        public static function autoQuote($query, $args) {
+        public static function autoQuote($query, array $args) {
             $i = strlen($query);
             $c = count($args);
             
