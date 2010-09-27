@@ -68,14 +68,14 @@
                 }
                 
                 if ($type == 0) {
-                    $replace = '\'' . addslashes($args[$c]) . '\'';
+                    $replace = self::instance()->quote($args[$c]);
                 }
                 elseif ($type == 1) {
                     $replace = intval($args[$c]);
                 }
                 elseif ($type == 2) {
                     foreach ($args[$c] as &$value) {
-                        $value = '\'' . addslashes($value) . '\'';
+                        $value = self::instance()->quote($value);
                     }
                     $replace = '(' . implode(',', $args[$c]) . ')';
                 }

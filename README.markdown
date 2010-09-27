@@ -40,7 +40,7 @@ Again, let's start with a example:
 See those question marks? These are placeholders, which will be replaced with the arguments
 passed after the query. There are several types of placeholders:
 ? simply inserts the argument, not performing any escaping [DEPRECATED! This behaviour will change!]
-?s (string) inserts the argument, performing string escaping, i.e. putting the argument in ' and applying `addslashes`
+?s (string) inserts the argument, performing string escaping, i.e. applying string escaping through PDO->quote
 ?i (integer) inserts the argument, performing integer escaping, i.e. applying `intval`
 ?a (array) inserts the argument, converting it to a list of string-escaped values:
     DB::q('SELECT * FROM user WHERE name IN ?a', array('foo', 'bar', 'hello', 'world'));

@@ -54,7 +54,7 @@
             return self::instance()->exec(self::autoQuote(array_shift($args), $args));
         }
         
-        public static function autoQuote($query, $args) {
+        public static function autoQuote($query, array $args) {
             $i = strlen($query);
             $c = count($args);
             
@@ -67,7 +67,7 @@
                 
                 if (isset($query[$i+1]) && isset(self::$joiners[$query[$i+1]])) {
                     foreach ($args[$c] as $key => &$value) {
-                        $value = '`' . $key . '`=\'' . addslashes($value) . '\'';
+                        $value = '`' . $key . '`=' . self::instance()->quote($value);
                     }
                     
                     $query = substr_replace($query, implode(self::$joiners[$query[$i+1]], $args[$c]), $i, 2);
@@ -79,13 +79,13 @@
                 }
                 elseif (is_array($args[$c])) {
                     foreach ($args[$c] as &$value) {
-                        $value = '\'' . addslashes($value) . '\'';
+                        $value = self::instance()->quote($value);
                     }
                     
                     $replace = '(' . implode(',', $args[$c]) . ')';
                 }
                 else {
-                    $replace = '\'' . addslashes($args[$c]) . '\'';
+                    $replace = self::instance()->quote($args[$c]);
                 }
                 
                 $query = substr_replace($query, $replace, $i, 1);
