@@ -1,7 +1,7 @@
 <?php
     class DB
     {
-        private static $instance = null;
+        protected static $instance = null;
         
         final private function __construct() {}
         final private function __clone() {}
