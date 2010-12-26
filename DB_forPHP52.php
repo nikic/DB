@@ -10,7 +10,7 @@
             if (self::$instance === null) {
                 try {
                     self::$instance = new PDO(
-                        'mysql:host='.DB_HOST.';dbname='.DB_NAME,
+                        'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME,
                         DB_USER,
                         DB_PASS,
                         array(
@@ -67,11 +67,9 @@
                 
                 if ($type == 0) {
                     $replace = self::instance()->quote($args[$c]);
-                }
-                elseif ($type == 1) {
+                } elseif ($type == 1) {
                     $replace = intval($args[$c]);
-                }
-                elseif ($type == 2) {
+                } elseif ($type == 2) {
                     foreach ($args[$c] as &$value) {
                         $value = self::instance()->quote($value);
                     }
