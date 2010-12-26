@@ -4,8 +4,8 @@ Simple database wrapper for PDO
 This is a *very* simplistic database wrapper for PDO, with two goals:
 **Simplicity** and **Security**!
 
-First design goal: Simple !
----------------------------
+First design goal: Simple!
+--------------------------
 
 I did not use the Singleton pattern for this class, because Singletons
 always involve unnecessarily much code and aren't that nice to use and read.
@@ -46,10 +46,10 @@ with the difference of "auto quoting":
 See those question marks? These are placeholders, which will be replaced with the arguments
 passed after the query. There are several types of placeholders:
 
- * `?` simply inserts the argument, not performing any escaping [DEPRECATED! This may be removed]
- * `?s` (string) inserts the argument, performing string escaping, i.e. applying string escaping through PDO->quote
+ * `?`  simply inserts the argument, not performing any escaping [DEPRECATED! This may be removed]
+ * `?s` (string)  inserts the argument, performing string escaping, i.e. applying string escaping through `PDO->quote`
  * `?i` (integer) inserts the argument, performing integer escaping, i.e. applying `intval`
- * `?a` (array) inserts the argument, converting it to a list of string-escaped values:
+ * `?a` (array)   inserts the argument, converting it to a list of string-escaped values:
        DB::q('SELECT * FROM user WHERE name IN ?a', array('foo', 'bar', 'hello', 'world'));
        // results in:
        // SELECT * FROM user WHERE name IN ('foo','bar','hello','world')
