@@ -109,6 +109,9 @@
         public static function getAvailableDrivers() {
             return self::instance()->getAvailableDrivers();
         }
+        public static function inTransaction() {
+            return self::instance()->inTransaction();
+        }
         public static function lastInsertId($name = NULL) {
             return self::instance()->lastInsertId($name);
         }
