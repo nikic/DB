@@ -46,9 +46,8 @@ with the difference of "auto quoting":
 See those question marks? These are placeholders, which will be replaced with the arguments
 passed after the query. There are several types of placeholders:
 
- * `?`  simply inserts the argument, not performing any escaping [DEPRECATED! This may be removed]
- * `?s` (string)  inserts the argument, performing string escaping, i.e. applying string escaping through `PDO->quote`
- * `?i` (integer) inserts the argument, performing integer escaping, i.e. applying `intval`
+ * `?s` (string)  inserts the argument applying string escaping through `PDO->quote`
+ * `?i` (integer) inserts the argument applying integer escaping through `intval`
  * `?a` (array)   inserts the argument, converting it to a list of string-escaped values:
        DB::q('SELECT * FROM user WHERE name IN ?a', array('foo', 'bar', 'hello', 'world'));
        // results in:

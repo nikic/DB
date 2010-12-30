@@ -53,36 +53,32 @@
         }
 
         public static function autoQuote($query, array $args) {
-            $i = strlen($query);
+            $i = strlen($query) - 1;
             $c = count($args);
 
-            if ($c != substr_count($query, '?')) {
-                throw new UnexpectedValueException('Wrong parameter count: Number of placeholders and parameters does not match');
+            while ($i--) {
+                if ('?' === $query[$i] && false !== $type = strpos('sia', $query[$i + 1])) {
+                    if (--$c < 0) {
+                        throw new InvalidArgumentException('Too little parameters.');
+                    }
+
+                    if (0 === $type) {
+                        $replace = self::instance()->quote($args[$c]);
+                    } elseif (1 === $type) {
+                        $replace = intval($args[$c]);
+                    } elseif (2 === $type) {
+                        foreach ($args[$c] as &$value) {
+                            $value = self::instance()->quote($value);
+                        }
+                        $replace = '(' . implode(',', $args[$c]) . ')';
+                    }
+
+                    $query = substr_replace($query, $replace, $i, 2);
+                }
             }
 
-            while ($c--) {
-                while ($i-- && $query[$i] != '?');
-
-                // $i+1 is the quote-r
-                if (!isset($query[$i+1]) || false === $type = strpos('sia', $query[$i+1])) {
-                    // no or unsupported quote-r given
-                    // => direct insert
-                    $query = substr_replace($query, $args[$c], $i, 1);
-                    continue;
-                }
-
-                if ($type == 0) {
-                    $replace = self::instance()->quote($args[$c]);
-                } elseif ($type == 1) {
-                    $replace = intval($args[$c]);
-                } elseif ($type == 2) {
-                    foreach ($args[$c] as &$value) {
-                        $value = self::instance()->quote($value);
-                    }
-                    $replace = '(' . implode(',', $args[$c]) . ')';
-                }
-
-                $query = substr_replace($query, $replace, $i, 2);
+            if ($c > 0) {
+                throw new InvalidArgumentException('Too many parameters.');
             }
 
             return $query;
